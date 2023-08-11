@@ -1,0 +1,246 @@
+.second_step{
+    font-family: 'Poppins', sans-serif; 
+    display: flex;
+    gap: 200px;
+    margin-top: 100px;
+}
+.process_container{
+    text-align: left;
+}
+.process_container h2{
+   margin-left: 120px;
+}
+.process_list{
+    text-align: start;
+    margin-left:  80px;
+}
+.process_list li{
+    list-style-type: none; 
+    line-height: 60px;
+    color: #5c5a5b;
+    font-size: 20px;
+}
+.process_list span{
+    border-radius: 50%;
+    padding: 6px 14px;
+    border: solid 1px #5A5A5C;
+}
+/* INPUTS */
+.input_process{
+    display: flex;  
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+.input_box_2{  
+    gap: 40px;
+    display: flex;    
+    justify-content: center;
+}
+.input_box{
+    line-height: 3px;
+    text-align: start;  
+}
+.input_box select{
+    border: 1px solid #9D9D9D;
+    border-radius: 18px;
+    height: 45px;
+    width: 330px;
+    font-family: 'Poppins', sans-serif; 
+    font-size: 18px;
+    padding-left: 16px;
+}
+.input_box h3{
+    color: #021187;
+    font-weight: 100;
+}
+.shorter_inputs{
+    border: 1px solid #9D9D9D;
+    border-radius: 18px;
+    height: 40px;
+    width: 300px;
+    font-family: 'Poppins', sans-serif; 
+    font-size: 18px;
+    padding-left: 20px;
+}
+.inputs_larger{
+    height: 45px;
+    width: 650px;
+    border: 1px solid #9D9D9D;
+    border-radius: 18px;
+    font-family: 'Poppins', sans-serif; 
+    font-size: 18px;
+    padding-left: 20px;
+}
+.process_continue{
+    color: #021187;
+    background: #2AFEB2;
+    border-radius: 25px;
+    height: 50px;
+    line-height: 47px;
+    width: 200px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.348);    
+    cursor: pointer;
+    transition: 0.5s;
+}
+.process_continue:hover{
+    transition: 0.5s;
+    box-shadow: inset 7px 3px 3px rgba(0, 0, 0, 0.331);
+}
+.parrafo_telefono{
+    color: #5A5A5C;
+    font-size: 13px;
+    line-height: 13px;
+}
+/* ESPECIE*/ 
+.especie_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.cat_dog_box_img {
+    display: flex;
+}
+.cat_dog_box_img img{
+    width: 110px;
+}
+.cat_box{
+    display: flex;
+    gap: 7px;
+    line-height: 0px;
+}
+
+/* Estilos para el checkbox redondo */
+.cat_box input[type="checkbox"] {
+    appearance: none; 
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #777; 
+    background-color: #ccc; 
+    cursor: pointer;
+    outline: none;
+  }
+  .cat_box input[type="checkbox"]:checked {
+    background-color: #021287b5;
+  }
+
+/* RESPONSIVE */ 
+@media (max-width: 1300px) {
+    
+}
+@media (max-width: 900px) {
+    .process_container{
+        align-items: center;
+        justify-content: center;
+    }
+    .process_container h2{
+        margin-left: 40px;
+     }
+     .process_list{
+         text-align: start;
+         margin-left: 10px;
+     }
+     .process_list li{
+         width: 300px;
+         list-style-type: none; 
+         line-height: 60px;
+         color: #5A5A5C;
+         font-size: 20px;
+     }
+     .second_step{
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+     }
+     .input_box h3{
+        font-size: 14px;
+     }
+     .input_box select option{
+        font-size: 17px;
+     }
+     .shorter_inputs{
+        width: 180px;
+        height: 35px;
+     }
+     .input_box select{
+        width: 205px;
+        height: 41px;
+     }
+     .inputs_larger{
+        width: 420px;
+        height: 35px;
+     }
+     .parrafo_telefono{
+        font-size: 10px;
+     }
+}
+@media (max-width: 500px) {
+    .input_box h3{
+        font-size: 14px;
+     }
+     .input_box select option{
+        font-size: 12px;
+     }
+     .shorter_inputs{
+        width: 130px;
+        height: 32px;
+     }
+     .input_box select{
+        width: 160px;
+        height: 36px;
+     }
+     .inputs_larger{
+        width: 320px;
+        height: 35px;
+     }
+     .parrafo_telefono{
+        font-size: 9px;
+     }
+     .input_section h2{
+        font-size: 20px;
+     }
+     .logo_img{
+        width: 230px;
+     }
+     .especie_container h3{
+        font-size: 15px;
+     }
+}
+@media (max-width: 410px) {
+    .genero_edad{
+        flex-direction: column;
+    }
+    .input_box h3{
+        font-size: 14px;
+     }
+     .shorter_inputs{
+        width: 130px;
+        height: 32px;
+     }
+     .input_box select{
+        width: 160px;
+        height: 36px;
+     }
+     .inputs_larger{
+        width: 250px;
+        height: 35px;
+     }
+     .parrafo_telefono{
+        font-size: 9px;
+     }
+     .input_section h2{
+        font-size: 16px;
+     }
+    .process_container h2{
+    font-size: 20px;
+    }
+    .process_list li{
+        width: 200px;
+        font-size: 14px;
+    }
+}
