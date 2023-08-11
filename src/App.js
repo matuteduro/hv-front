@@ -9,7 +9,7 @@ import FourthStep from './components/FourthStep';
 import Footer from './components/Footer';
 import { FormProvider } from './context/FormContext';
 import { PetDataProvider } from './context/petDataContext';
-import DebugPetDataContext from './components/DebugPetDataContext ';
+// import DebugPetDataContext from './components/DebugPetDataContext ';
 
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
       <Route path="/step4" element= {<FourthStep />}/>
       </Routes>
       <Footer/>
-      <DebugPetDataContext/>
+      {/* <DebugPetDataContext/> */}
     </div>
     </PetDataProvider>
     </FormProvider>

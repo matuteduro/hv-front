@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./thirdstep.css";
 import PetDataSection from "./PetDataSection";
 import { usePetData } from "../context/petDataContext";
@@ -25,6 +25,10 @@ const SecondStep = () => {
     const newIndex = petSections.length + 1;
     setPetSections([...petSections, { index: newIndex }]);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handlePetInputChange = (index, field, value) => {
     const updatedPetSections = petSections.map((pet, i) => {
@@ -70,7 +74,7 @@ const SecondStep = () => {
         .then(response => {
           console.log("Data sent successfully. Server response:", response);
 
-          return axios.post('http://localhost:8080/api/mercadoPago/subscription/new', {
+          return axios.post(`${process.env.REACT_APP_SERVER_URL}mercadoPago/subscription/new`, {
             email: formData.email,
             amount: formData.amount,
             plan: formData.plan

@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-const API_ENDPOINT = 'http://localhost:8080/api/holavet';
-
 export const sendDataToServer = async (petData, formData) => {
   try {
-    const response = await axios.post(API_ENDPOINT, {
+    const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}holavet`, {
       petData: petData,
       formData: formData
     });

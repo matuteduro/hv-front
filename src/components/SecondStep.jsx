@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./secondstep.css";
@@ -25,6 +25,11 @@ const SecondStep = () => {
   const [codigoPostal, setCodigoPostal] = useState(formData.codigoPostal);
   const [isFormComplete, setIsFormComplete] = useState(true);
   const [isValidationTriggered, setIsValidationTriggered] = useState(false);
+
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleKeyPress = (event) => {
     const charCode = event.which ? event.which : event.keyCode;
