@@ -73,7 +73,7 @@ const SecondStep = () => {
       sendDataToServer(petSections, formData)
         .then(response => {
           console.log("Data sent successfully. Server response:", response);
-
+          console.log(process.env.REACT_APP_SERVER_URL);
           return axios.post(`${process.env.REACT_APP_SERVER_URL}mercadoPago/subscription/new`, {
             email: formData.email,
             amount: formData.amount,
