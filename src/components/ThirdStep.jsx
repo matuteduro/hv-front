@@ -14,10 +14,11 @@ const SecondStep = () => {
   // const navigate = useNavigate();
 
   const { petSections, setPetSections } = usePetData(); // Use the context
-  const { formData } = useFormContext();
+  const { formData} = useFormContext();
   const [isValidationTriggered, setIsValidationTriggered] = useState(false);
   const [isCheckboxValid, setIsCheckboxValid] = useState(false);
   const showPetSection = petSections.length >= 3;
+
 
   const isFormComplete = petSections.every(pet => pet.nombre && pet.genero && pet.raza && (pet.isCatSelected || pet.isDogSelected));
 
@@ -80,18 +81,40 @@ const SecondStep = () => {
 
     if (isComplete && isCheckboxSelected) {
       const petSectionsCount = petSections.length;
+
+      let plan;
+      let opcion;
+      if (petSectionsCount === 1) {
+          plan = 'Basico';
+          opcion = formData.preciosData[0].Nombre
+      } else if (petSectionsCount === 2) {
+          plan = 'Preferido';
+          opcion = formData.preciosData[1].Nombre
+      } else if (petSectionsCount >= 3) {
+          plan = 'Full';
+          opcion = formData.preciosData[2].Nombre
+      }
+
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = (1 + date.getMonth()).toString().padStart(2, '0'); // months are 0-based in JS
+        const day = date.getDate().toString().padStart(2, '0');
+        
+        const currentDate = `${year}-${month}-${day}`
+
       // console.log('cantidad mascotas', petSectionsCount);
       // console.log(formData);
       const realAmount = Number(formData.preciosData[petSectionsCount - 1].Premio[0].split('.')[0]);
-      console.log('cantidad cuota', realAmount);
-      sendDataToServer(petSections, formData)
+      // console.log('cantidad cuota', realAmount);
+
+      sendDataToServer(petSections, formData, currentDate, opcion)
         .then(response => {
           console.log("Data sent successfully. Server response:", response);
           console.log(process.env.REACT_APP_SERVER_URL);
           return axios.post(`${process.env.REACT_APP_SERVER_URL}mercadoPago/subscription/new`, {
             email: formData.email,
             amount: realAmount,
-            plan: formData.plan
+            plan: plan
           });
         })
         .then(axiosResponse => {
@@ -166,17 +189,30 @@ const SecondStep = () => {
               />
             ))}
 
-            {!showPetSection && (
-              <>
-              <button
-                onClick={handleAddPetSection}
-                style={{ fontSize: "24px", marginTop: "80px", width: "30px" }}
-                >
-                +
-              </button>
-               {petSections.length > 0 && <button onClick={handleRemoveLastPetSection} style={{ fontSize: "24px", marginTop: "80px", marginLeft: "10px", width: "30px"}}> - </button>}
+              {!showPetSection && (
+                <>
+                  <button
+                    onClick={handleAddPetSection}
+                    style={{ fontSize: "24px", marginTop: "80px", width: "30px" }}
+                  >
+                    +
+                  </button>
                 </>
-            )}
+              )}
+              
+              {petSections.length >= 2 && (
+                <button
+                  onClick={handleRemoveLastPetSection}
+                  style={{
+                    fontSize: "24px",
+                    marginTop: "80px",
+                    marginLeft: "10px",
+                    width: "30px"
+                  }}
+                >
+                  -
+                </button>
+              )}
             <h5>Agregar otras mascotas</h5>
           </div>
 

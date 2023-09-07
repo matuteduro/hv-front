@@ -47,7 +47,7 @@ useEffect(() => {
     };
       const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}crm/getPrecios`, requestBody, config);
       const opciones = response.data.resultado.ResponseTarget[0].Endosos[0].Endoso[0].Opciones[0].Opcion
-
+      const nroEndoso   = response.data.resultado.ResponseTarget[0].Endosos[0].Endoso[0].Nro[0]
       const OpcionesReales = [
         process.env.REACT_APP_OPCION_1, 
         process.env.REACT_APP_OPCION_2, 
@@ -63,10 +63,14 @@ useEffect(() => {
       );
 
       setPreciosData(filteredOpciones);
+        console.log(filteredOpciones);
+      updateData({
+                  preciosData: filteredOpciones,
+                  Poliza:process.env.REACT_APP_POLIZA_ID,
+                  Endoso:process.env.REACT_APP_POLIZA_ID+nroEndoso,
+                })
 
-      updateData({ preciosData: filteredOpciones })
-
-      console.log(preciosData[0].Premio[0].split('.')[0]);
+      // console.log(preciosData?.[2]?.Premio?.[0]?.split('.')?.[0]);
       
     } catch (error) {
       console.error("Error fetching precios:", error);

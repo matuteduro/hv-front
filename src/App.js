@@ -25,7 +25,7 @@ function App() {
       <Route path="/step4" element= {<FourthStep />}/>
       </Routes>
       <Footer/>
-      {/* <DebugPetDataContext/> */}
+      <DebugPetDataContext/>
     </div>
     </PetDataProvider>
     </FormProvider>

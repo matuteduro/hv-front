@@ -9,7 +9,7 @@ export const FormProvider = ({ children }) => {
     ? JSON.parse(localStorage.getItem('formData'))
     : {};
 
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState(initialData);
 
     const updateData = (newData) => {
         setFormData((prevData) => ({ ...prevData, ...newData }));

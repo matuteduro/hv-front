@@ -38,6 +38,14 @@ const SecondStep = () => {
     }
   };
 
+  function formatDate(date) {
+    let year = date.getFullYear();
+    let month = (1 + date.getMonth()).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+
+    return year + '-' + month + '-' + day;
+}
+
   const isValidEmail = (email) => {
     return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email);
   };
@@ -56,6 +64,8 @@ const SecondStep = () => {
       }
     });
 
+    const fechaNacimiento = formatDate(selectedDate); 
+
     setIsValidationTriggered(true);
     setIsFormComplete(isComplete);
 
@@ -70,6 +80,8 @@ const SecondStep = () => {
     } else if (genero === "Femenino") {
         sexoTitular = 100000000;
     }
+
+
 
     let TipoDocumentoTitular;
     switch (tipoDocumento) {
@@ -89,7 +101,7 @@ const SecondStep = () => {
 
         // Update form data in context
         updateData({
-          selectedDate,
+          fechaNacimiento,
           nombre,
           apellido,
           tipoDocumento,
