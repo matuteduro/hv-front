@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./firststep.css";
 import { useNavigate } from 'react-router-dom';
 import { useFormContext } from "../context/FormContext";
+import axios from 'axios'; 
 
 
 
@@ -10,6 +11,8 @@ import { useFormContext } from "../context/FormContext";
 const FirstStep = () => {
 
   const [isMobile, setIsMobile] = useState(false);
+
+  const [preciosData, setPreciosData] = useState([])
 
   const checkMobileView = () => {
     setIsMobile(window.innerWidth <= 900);
@@ -30,6 +33,48 @@ const FirstStep = () => {
     updateData({ plan });
     navigate('/step2');
 };
+
+useEffect(() => {
+  const getPrecios = async () => {
+    try {
+      const requestBody = {
+        idPoliza: `${process.env.REACT_APP_POLIZA_ID}`
+      };
+      const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}crm/getPrecios`, requestBody, config);
+      const opciones = response.data.resultado.ResponseTarget[0].Endosos[0].Endoso[0].Opciones[0].Opcion
+
+      const OpcionesReales = [
+        process.env.REACT_APP_OPCION_1, 
+        process.env.REACT_APP_OPCION_2, 
+        process.env.REACT_APP_OPCION_3
+      ];
+
+      console.log(OpcionesReales);
+      
+
+      const filteredOpciones = opciones.filter(opcion => 
+    
+        OpcionesReales.includes(opcion.Nombre[0])
+      );
+
+      setPreciosData(filteredOpciones);
+
+      updateData({ preciosData: filteredOpciones })
+
+      console.log(preciosData[0].Premio[0].split('.')[0]);
+      
+    } catch (error) {
+      console.error("Error fetching precios:", error);
+    }
+  };
+
+  getPrecios();
+}, []);
 
   return (
 <div className="table_container">
@@ -67,7 +112,7 @@ const FirstStep = () => {
               <p>1</p>
               <p></p>
               <h4 className="sin_limites">Sin límite</h4>
-              <h4 className="charge_number">$1610</h4>
+              <h4 className="charge_number">${preciosData?.[0]?.Premio?.[0]?.split('.')?.[0] || ''}</h4>
           <h3 className='contract' onClick={() => handlePlanSelection('basic')}>Contratar</h3>
           </div>
           <div className="mobile_number_list">
@@ -111,7 +156,7 @@ const FirstStep = () => {
               <p>1</p>
               <p></p>
               <h4 className="sin_limites">Sin límite</h4>
-              <h4 className="charge_number">$1825</h4>
+              <h4 className="charge_number">${preciosData?.[1]?.Premio?.[0]?.split('.')?.[0] || ''}</h4>
           <h3 className='contract' onClick={() => handlePlanSelection('preferido')}>Contratar</h3>
           </div>
           <div className="third_number_column"
@@ -140,7 +185,7 @@ const FirstStep = () => {
               <p>1</p>
               <p></p>
               <h4 className="sin_limites">Sin límite</h4>
-              <h4 className="charge_number">$2050</h4>
+              <h4 className="charge_number">${preciosData?.[2]?.Premio?.[0]?.split('.')?.[0] || ''}</h4>
           <h3 className='contract' onClick={() => handlePlanSelection('full')}>Contratar</h3>
           </div>
 </div>
@@ -377,7 +422,7 @@ const FirstStep = () => {
           <section className="plan_container_mobile">       
           <div className="plan_box_mobile_1">
             <h2 className="plan_box_tittle_1">Plan Básico</h2>
-            <h2 className="plan_box_price">$2.300.-</h2>
+            <h2 className="plan_box_price">${preciosData?.[0]?.Premio?.[0]?.split('.')?.[0] || ''}.-</h2>
             <p>Mensual</p>
             <div className="box_items">
               <div className="box_items_h4">
@@ -401,7 +446,7 @@ const FirstStep = () => {
 
           <div className="plan_box_mobile_2">
             <h2 className="plan_box_tittle_2">Plan Preferido</h2>
-            <h2 className="plan_box_price">$2.300.-</h2>
+            <h2 className="plan_box_price">${preciosData?.[1]?.Premio?.[0]?.split('.')?.[0] || ''}.-</h2>
             <p>Mensual</p>
             <div className="box_items">
               <div className="box_items_h4">
@@ -425,7 +470,7 @@ const FirstStep = () => {
 
           <div className="plan_box_mobile_3">
             <h2 className="plan_box_tittle_3">Plan Full</h2>
-            <h2 className="plan_box_price" style={{color:"#2AFEB2"}}>$2.300.-</h2>
+            <h2 className="plan_box_price" style={{color:"#2AFEB2"}}>${preciosData?.[2]?.Premio?.[0]?.split('.')?.[0] || ''}.-</h2>
             <p>Mensual</p>
             <div className="box_items">
               <div className="box_items_h4">

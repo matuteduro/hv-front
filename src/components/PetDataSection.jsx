@@ -1,4 +1,6 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
+
 
 const PetDataSection = ({ index,
     isCatSelected,
@@ -16,6 +18,43 @@ const PetDataSection = ({ index,
     isValidationTriggered,
     isCheckboxValid, }) => {
         const displayIndex = index + 1;
+
+  const [razas, setRazas] = useState([]);
+
+  useEffect(() => {
+        const fetchRazas = async () => {
+            try {
+                const requestBody = {
+                    nombreRegistro: "Razas"
+                };
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                };
+                const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}crm/getRegistros`, requestBody, config);
+                setRazas(response.data.resultado.ResponseTarget);  // Assuming the response contains the razas directly. Adjust if needed.
+                console.log(razas);
+
+                
+            } catch (error) {
+                console.error("Error fetching razas:", error);
+            }
+        };
+
+        fetchRazas();
+  }, []);
+
+  const filteredRazas = razas.filter(raza => {
+    if (isDogSelected) {
+        return raza.Descripcion[0] === "Perro";
+    } else if (isCatSelected) {
+        return raza.Descripcion[0] === "Gato";
+    }
+    return true;  // If neither dog nor cat is selected, no razas are shown.
+});
+
+
   return (
     <div>
       <h3 style={{ color: "#2AFEB2"}}>Datos de la mascota {displayIndex}</h3>
@@ -84,14 +123,24 @@ const PetDataSection = ({ index,
                 <option value="Femenino">Hembra</option>
               </select>
             </div></div>
-            <div className="input_box">
+            <div className="input_box_7">
             <h3>Raza</h3>
-              <input className="inputs_larger" type="text"  value={raza}
-              onChange={(event) => onRazaChange(event.target.value)}
-              style={{
-                border: isValidationTriggered && !raza ? "1px solid red" : ""
-              }}/>
-              </div>
+            <select 
+                className="inputs_larger"
+                value={raza} 
+                onChange={(event) => onRazaChange(event.target.value)} 
+                style={{
+                    border: isValidationTriggered && !raza ? "1px solid red" : ""
+                }}>
+                <option value="">Seleccionar</option>
+                {filteredRazas.map((razaOption) => (
+                    <option key={razaOption.Nombre[0]} value={razaOption.Nombre[0]}>
+                        {razaOption.Nombre[0]}
+                    </option>
+                ))}
+            </select>
+        </div>
+
           </div>
         </div>
     </div>

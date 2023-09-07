@@ -17,7 +17,7 @@ const SecondStep = () => {
   const [apellido, setApellido] = useState(formData.apellido);
   const [tipoDocumento, setTipoDocumento] = useState(formData.tipoDocumento);
   const [dni, setDni] = useState(formData.dni);
-  const [genero, setGenero] = useState(formData.genero);
+  const [genero, setGenero] = useState(formData.genero || 'Masculino');
   const [telefono, setTelefono] = useState(formData.telefono);
   const [email, setEmail] = useState(formData.email);
   const [direccion, setDireccion] = useState(formData.direccion);
@@ -59,6 +59,30 @@ const SecondStep = () => {
       return;
     }
 
+    console.log('genero es', genero);
+    let sexoTitular;
+    if (genero === "Masculino") {
+        sexoTitular = 100000001;
+    } else if (genero === "Femenino") {
+        sexoTitular = 100000000;
+    }
+
+    let TipoDocumentoTitular;
+    switch (tipoDocumento) {
+        case "DNI":
+            TipoDocumentoTitular = 1;
+            break;
+        case "Pasaporte":
+            TipoDocumentoTitular = 100000000;
+            break;
+        case "Cedula":
+            TipoDocumentoTitular = 100000001;
+            break;
+        default:
+            // Handle other cases or defaults if required
+            break;
+    }
+
         // Update form data in context
         updateData({
           selectedDate,
@@ -72,6 +96,8 @@ const SecondStep = () => {
           direccion,
           localidad,
           codigoPostal,
+          sexoTitular,
+          TipoDocumentoTitular
       });
   
       // Navigate without passing the state

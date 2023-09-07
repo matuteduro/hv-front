@@ -17,7 +17,7 @@ const SecondStep = () => {
   const { formData } = useFormContext();
   const [isValidationTriggered, setIsValidationTriggered] = useState(false);
   const [isCheckboxValid, setIsCheckboxValid] = useState(false);
-  const showPetSection = petSections.length > 3;
+  const showPetSection = petSections.length >= 3;
 
   const isFormComplete = petSections.every(pet => pet.nombre && pet.genero && pet.raza && (pet.isCatSelected || pet.isDogSelected));
 
@@ -25,6 +25,13 @@ const SecondStep = () => {
     const newIndex = petSections.length + 1;
     setPetSections([...petSections, { index: newIndex }]);
   };
+
+  const handleRemoveLastPetSection = () => {
+    if (petSections.length > 0) {
+        const newPetSections = petSections.slice(0, -1);
+        setPetSections(newPetSections);
+    }
+};
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -64,19 +71,26 @@ const SecondStep = () => {
   const handleContinue = () => {
     const isComplete = petSections.every(pet => pet.nombre && pet.genero && pet.raza);
     setIsValidationTriggered(true);
+
+
     
     const isCheckboxSelected = petSections.some(pet => pet.isCatSelected || pet.isDogSelected);
 
     setIsCheckboxValid(isCheckboxSelected);
 
     if (isComplete && isCheckboxSelected) {
+      const petSectionsCount = petSections.length;
+      console.log('cantidad mascotas', petSectionsCount);
+      console.log(formData);
+      const realAmount = Number(formData.preciosData[petSectionsCount - 1].Premio[0].split('.')[0]);
+      console.log('cantidad cuota', realAmount);
       sendDataToServer(petSections, formData)
         .then(response => {
           console.log("Data sent successfully. Server response:", response);
           console.log(process.env.REACT_APP_SERVER_URL);
           return axios.post(`${process.env.REACT_APP_SERVER_URL}mercadoPago/subscription/new`, {
             email: formData.email,
-            amount: formData.amount,
+            amount: realAmount,
             plan: formData.plan
           });
         })
@@ -153,12 +167,15 @@ const SecondStep = () => {
             ))}
 
             {!showPetSection && (
+              <>
               <button
                 onClick={handleAddPetSection}
-                style={{ fontSize: "24px", marginTop: "80px" }}
-              >
+                style={{ fontSize: "24px", marginTop: "80px", width: "30px" }}
+                >
                 +
               </button>
+               {petSections.length > 0 && <button onClick={handleRemoveLastPetSection} style={{ fontSize: "24px", marginTop: "80px", marginLeft: "10px", width: "30px"}}> - </button>}
+                </>
             )}
             <h5>Agregar otras mascotas</h5>
           </div>
