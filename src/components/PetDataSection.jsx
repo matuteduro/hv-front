@@ -34,7 +34,7 @@ const PetDataSection = ({ index,
                 };
                 const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}crm/getRegistros`, requestBody, config);
                 setRazas(response.data.resultado.ResponseTarget);  // Assuming the response contains the razas directly. Adjust if needed.
-                console.log(razas);
+                // console.log(razas);
 
                 
             } catch (error) {

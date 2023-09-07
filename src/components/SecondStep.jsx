@@ -73,7 +73,7 @@ const SecondStep = () => {
       return;
     }
 
-    console.log('genero es', genero);
+    // console.log('genero es', genero);
     let sexoTitular;
     if (genero === "Masculino") {
         sexoTitular = 100000001;

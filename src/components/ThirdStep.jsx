@@ -107,10 +107,12 @@ const SecondStep = () => {
       const realAmount = Number(formData.preciosData[petSectionsCount - 1].Premio[0].split('.')[0]);
       // console.log('cantidad cuota', realAmount);
 
+      // console.log(currentDate);
+      // console.log(opcion);
       sendDataToServer(petSections, formData, currentDate, opcion)
         .then(response => {
-          console.log("Data sent successfully. Server response:", response);
-          console.log(process.env.REACT_APP_SERVER_URL);
+          // console.log("Data sent successfully. Server response:", response);
+          // console.log(process.env.REACT_APP_SERVER_URL);
           return axios.post(`${process.env.REACT_APP_SERVER_URL}mercadoPago/subscription/new`, {
             email: formData.email,
             amount: realAmount,
@@ -118,14 +120,14 @@ const SecondStep = () => {
           });
         })
         .then(axiosResponse => {
-          console.log("Axios post request successful. Server response:", axiosResponse.data);
+          // console.log("Axios post request successful. Server response:", axiosResponse.data);
           window.location.href = axiosResponse.data.link;
         })
         .catch(error => {
           console.error("Error:", error);
         });
     } else {
-      console.log("Data is not complete or checkbox is not selected");
+      // console.log("Data is not complete or checkbox is not selected");
     }
   };
 
@@ -199,7 +201,7 @@ const SecondStep = () => {
                   </button>
                 </>
               )}
-              
+
               {petSections.length >= 2 && (
                 <button
                   onClick={handleRemoveLastPetSection}

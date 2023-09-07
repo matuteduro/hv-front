@@ -54,7 +54,7 @@ useEffect(() => {
         process.env.REACT_APP_OPCION_3
       ];
 
-      console.log(OpcionesReales);
+      // console.log(OpcionesReales);
       
 
       const filteredOpciones = opciones.filter(opcion => 
@@ -63,7 +63,7 @@ useEffect(() => {
       );
 
       setPreciosData(filteredOpciones);
-        console.log(filteredOpciones);
+        // console.log(filteredOpciones);
       updateData({
                   preciosData: filteredOpciones,
                   Poliza:process.env.REACT_APP_POLIZA_ID,
