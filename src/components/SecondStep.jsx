@@ -38,13 +38,17 @@ const SecondStep = () => {
     }
   };
 
+  const isValidEmail = (email) => {
+    return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email);
+  };
+
   const handleContinue = () => {
     const formInputs = document.querySelectorAll(
       ".input_box input, .input_box select"
     );
     let isComplete = true;
     formInputs.forEach((input) => {
-      if (!input.value) {
+      if (!input.value || (input.type === "text" && input.value === email && !isValidEmail(email))) {
         isComplete = false;
         input.classList.add("incomplete");
       } else {
@@ -257,20 +261,21 @@ const SecondStep = () => {
           </div>
 
           <div className="input_box_2">
-            <div className="input_box">
-              <h3>Email*</h3>
-              <input
-                className="inputs_larger"
-                type="text"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                style={{
-                  border:
-                    isValidationTriggered && !email ? "1px solid red" : "",
-                }}
-              />
-            </div>
-          </div>
+        <div className="input_box">
+          <h3>Email*</h3>
+          <input
+            className="inputs_larger"
+            type="text"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            style={{
+              border:
+                isValidationTriggered && !isValidEmail(email) ? "1px solid red" : "",
+            }}
+          />
+        </div>
+      </div>
+
 
           <div className="input_box_2">
             <div className="input_box">

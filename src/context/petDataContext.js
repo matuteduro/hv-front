@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const PetDataContext = createContext();
 
@@ -7,7 +7,16 @@ export const usePetData = () => {
 };
 
 export const PetDataProvider = ({ children }) => {
-  const [petSections, setPetSections] = useState([{ index: 1 }]);
+
+  const initialData = localStorage.getItem('petSections') 
+                     ? JSON.parse(localStorage.getItem('petSections'))
+                     : [{ index: 1 }];
+
+  const [petSections, setPetSections] = useState(initialData);
+
+  useEffect(() => {
+    localStorage.setItem('petSections', JSON.stringify(petSections));
+  }, [petSections]);
 
   return (
     <PetDataContext.Provider value={{ petSections, setPetSections }}>

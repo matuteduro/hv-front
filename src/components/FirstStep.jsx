@@ -335,7 +335,7 @@ useEffect(() => {
                 <h4>
                   Analisis y estudios en caso de <br /> enfermedad grave o accidente
                 </h4>
-                <h5>Hasta $3500.- por evento</h5>
+                <h5>Hasta $5500.- por evento</h5>
               </div>
               <hr />
             </div>
