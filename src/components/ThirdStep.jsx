@@ -80,8 +80,8 @@ const SecondStep = () => {
 
     if (isComplete && isCheckboxSelected) {
       const petSectionsCount = petSections.length;
-      console.log('cantidad mascotas', petSectionsCount);
-      console.log(formData);
+      // console.log('cantidad mascotas', petSectionsCount);
+      // console.log(formData);
       const realAmount = Number(formData.preciosData[petSectionsCount - 1].Premio[0].split('.')[0]);
       console.log('cantidad cuota', realAmount);
       sendDataToServer(petSections, formData)
