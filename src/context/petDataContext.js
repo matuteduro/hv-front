@@ -18,8 +18,13 @@ export const PetDataProvider = ({ children }) => {
     localStorage.setItem('petSections', JSON.stringify(petSections));
   }, [petSections]);
 
+  const clearDataPet = () => {
+    setPetSections([{ index: 1 }]);
+};
+
+
   return (
-    <PetDataContext.Provider value={{ petSections, setPetSections }}>
+    <PetDataContext.Provider value={{ petSections, setPetSections, clearDataPet }}>
       {children}
     </PetDataContext.Provider>
   );

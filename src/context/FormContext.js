@@ -15,13 +15,17 @@ export const FormProvider = ({ children }) => {
         setFormData((prevData) => ({ ...prevData, ...newData }));
     };
 
+    const clearData = () => {
+        setFormData({});
+    };
+
     // Store data in localStorage whenever formData changes
     useEffect(() => {
         localStorage.setItem('formData', JSON.stringify(formData));
     }, [formData]);
 
     return (
-        <FormContext.Provider value={{ formData, updateData }}>
+        <FormContext.Provider value={{ formData, updateData, clearData  }}>
             {children}
         </FormContext.Provider>
     );

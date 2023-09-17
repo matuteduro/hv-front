@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
+import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 import "./secondstep.css";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +27,31 @@ const SecondStep = () => {
   const [isFormComplete, setIsFormComplete] = useState(true);
   const [isValidationTriggered, setIsValidationTriggered] = useState(false);
 
+  
+  const handleNumericInputChange = (value) => {
+    return value.replace(/\D/g, "");  // Remove all non-digit characters
+  };
+
+
+  const formatInputDate = (value) => {
+    return value
+        .replace(/\D/g, '')                  // Remove all non-numeric characters
+        .replace(/(\d{2})(?=\d)/, '$1/')     // Add a slash after every 2 digits
+        .replace(/(\d{2}\/\d{2})(?=\d)/, '$1/'); // Add a slash after 4th digit
+};
+
+const handleRawDateChange = (e) => {
+  if (!e.target || !e.target.value) return; // Return early if no value exists
+
+  const value = formatInputDate(e.target.value);
+  const date = moment(value, "DD/MM/YYYY").toDate();
+  
+  if (!isNaN(date)) {
+      setSelectedDate(date);
+  }
+
+  e.target.value = value;  // Set the formatted value back to the input
+};
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -38,7 +64,10 @@ const SecondStep = () => {
     }
   };
 
-  function formatDate(date) {
+function formatDate(date) {
+  if (!date) { // This checks for null, undefined, and some other falsy values
+    return null; // or return a default value or throw a meaningful error
+  }
     let year = date.getFullYear();
     let month = (1 + date.getMonth()).toString().padStart(2, '0');
     let day = date.getDate().toString().padStart(2, '0');
@@ -63,6 +92,11 @@ const SecondStep = () => {
         input.classList.remove("incomplete");
       }
     });
+
+    if (!selectedDate) {
+      isComplete = false;
+    }
+
 
     const fechaNacimiento = formatDate(selectedDate); 
 
@@ -207,7 +241,7 @@ const SecondStep = () => {
                 className="shorter_inputs"
                 type="text"
                 value={dni}
-                onChange={(event) => setDni(event.target.value)}
+                onChange={(event) => setDni(handleNumericInputChange(event.target.value))}
                 style={{
                   border: isValidationTriggered && !dni ? "1px solid red" : "",
                 }}
@@ -219,16 +253,18 @@ const SecondStep = () => {
             <div className="input_box">
               <h3>Fecha de Nacimiento*</h3>
               <DatePicker
+                closeOnScroll={true}
                 className="shorter_inputs"
                 selected={selectedDate}
                 onChange={(date) => setSelectedDate(date)}
+                onChangeRaw={handleRawDateChange}
                 dateFormat="dd/MM/yyyy"
-                showYearDropdown
+                // showYearDropdown
                 scrollableYearDropdown
                 yearDropdownItemNumber={100}
                 placeholderText="DD/MM/AAAA"
                 wrapperClassName={
-                  isValidationTriggered && !selectedDate ? "incomplete" : ""
+                  isValidationTriggered && !selectedDate ? "datepicker-wrapper incomplete" : "datepicker-wrapper"
                 }
               />
             </div>
@@ -259,7 +295,7 @@ const SecondStep = () => {
                 type="text"
                 onKeyPress={handleKeyPress}
                 value={telefono}
-                onChange={(event) => setTelefono(event.target.value)}
+                onChange={(event) => setTelefono(handleNumericInputChange(event.target.value))}
                 style={{
                   border:
                     isValidationTriggered && !telefono ? "1px solid red" : "",

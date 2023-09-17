@@ -3,6 +3,7 @@ import "./firststep.css";
 import { useNavigate } from 'react-router-dom';
 import { useFormContext } from "../context/FormContext";
 import axios from 'axios'; 
+import { usePetData } from "../context/petDataContext";
 
 
 
@@ -10,15 +11,23 @@ import axios from 'axios';
 
 const FirstStep = () => {
 
+  
+
   const [isMobile, setIsMobile] = useState(false);
 
   const [preciosData, setPreciosData] = useState([])
+  const { updateData, clearData } = useFormContext();
 
   const checkMobileView = () => {
     setIsMobile(window.innerWidth <= 900);
   };
 
+  const { clearDataPet } = usePetData();
+
   useEffect(() => {
+    localStorage.removeItem('formData');
+    clearData()
+    clearDataPet()
     checkMobileView();
     window.addEventListener("resize", checkMobileView);
     return () => {
@@ -27,7 +36,6 @@ const FirstStep = () => {
   }, []);
 
   const navigate = useNavigate();
-  const { updateData } = useFormContext();
 
   const handlePlanSelection = (plan) => {
     updateData({ plan });
@@ -45,8 +53,11 @@ useEffect(() => {
             'Content-Type': 'application/json'
         }
     };
+      // console.log('URL:', `${process.env.REACT_APP_SERVER_URL}crm/getPrecios`);
       const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}crm/getPrecios`, requestBody, config);
+      // console.log('respuesta', response);
       const opciones = response.data.resultado.ResponseTarget[0].Endosos[0].Endoso[0].Opciones[0].Opcion
+      // console.log('opciones', opciones);
       const nroEndoso   = response.data.resultado.ResponseTarget[0].Endosos[0].Endoso[0].Nro[0]
       const OpcionesReales = [
         process.env.REACT_APP_OPCION_1, 
