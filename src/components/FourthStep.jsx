@@ -1,7 +1,46 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./fourthstep.css";
+import { usePetData } from "../context/petDataContext";
+import { useFormContext } from "../context/FormContext";
+import { sendDataToServer } from "../helpers/apiHelper";
 
 const FourthStep = () => {
+
+  const { petSections } = usePetData();
+  const { formData } = useFormContext();
+
+  useEffect(() => {
+    const petSectionsCount = petSections.length;
+
+    let plan;
+    let opcion;
+    if (petSectionsCount === 1) {
+      plan = 'Basico';
+      opcion = formData.preciosData[0].Nombre
+    } else if (petSectionsCount === 2) {
+      plan = 'Preferido';
+      opcion = formData.preciosData[1].Nombre
+    } else if (petSectionsCount >= 3) {
+      plan = 'Full';
+      opcion = formData.preciosData[2].Nombre
+    }
+
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (1 + date.getMonth()).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    const currentDate = `${year}-${month}-${day}`;
+
+    sendDataToServer(petSections, formData, currentDate, opcion)
+      .then(response => {
+        // console.log("Data successfully sent to server.");
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+  }, []); 
+
   return (
     <div className="fourthstep1">
       <div className="fourthstep">

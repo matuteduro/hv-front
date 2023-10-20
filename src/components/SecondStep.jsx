@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import DatePicker from "react-datepicker";
 import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
@@ -26,6 +27,80 @@ const SecondStep = () => {
   const [codigoPostal, setCodigoPostal] = useState(formData.codigoPostal);
   const [isFormComplete, setIsFormComplete] = useState(true);
   const [isValidationTriggered, setIsValidationTriggered] = useState(false);
+
+
+  const [provincias, setProvincias] = useState([]);
+
+  useEffect(() => {
+        const fetchProvincias = async () => {
+            try {
+                const requestBody = {
+                    nombreRegistro: "Provincia"
+                };
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                };
+                const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}crm/getRegistros`, requestBody, config);
+                setProvincias(response.data.resultado.ResponseTarget);  // Assuming the response contains the razas directly. Adjust if needed.
+                // console.log(razas);
+
+                
+            } catch (error) {
+                console.error("Error fetching razas:", error);
+            }
+        };
+
+        fetchProvincias();
+  }, [provincias]);
+
+const [codePostal, setcodePostal] = useState([]);
+
+  useEffect(() => {
+    const codigoPostal = async () => {
+        try {
+            const requestBody = {
+                nombreRegistro: "Localidad"
+            };
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}crm/getRegistros`, requestBody, config);
+            const allPostalCodes = response.data.resultado.ResponseTarget;
+
+            // Filtering logic to remove duplicates based on Descripcion value
+            const seen = new Set();
+            const uniquePostalCodes = allPostalCodes.filter(postalCode => {
+                // Check if Descripcion exists and has a valid value
+                if (postalCode.Descripcion && postalCode.Descripcion.length > 0) {
+                    const descValue = postalCode.Descripcion[0];
+                    if (seen.has(descValue)) {
+                        return false;
+                    } else {
+                        seen.add(descValue);
+                        return true;
+                    }
+                }
+                // If Descripcion doesn't exist or is invalid, skip this postalCode
+                return false;
+            });
+
+            // console.log(uniquePostalCodes);
+            setcodePostal(uniquePostalCodes);
+
+        } catch (error) {
+            console.error("Error fetching razas:", error);
+        }
+    };
+
+    codigoPostal();
+}, [codePostal]);
+
+
+
 
   
   const handleNumericInputChange = (value) => {
@@ -343,21 +418,39 @@ function formatDate(date) {
 
           <div className="input_box_2">
             <div className="input_box">
-              <h3>Localidad</h3>
-              <input
-                className="shorter_inputs"
-                type="text"
-                value={localidad}
-                onChange={(event) => setLocalidad(event.target.value)}
+              <h3>Provincia</h3>
+              <select 
+                className="inputs_larger"
+                value={localidad} 
+                onChange={(event) => setLocalidad(event.target.value)} 
                 style={{
-                  border:
-                    isValidationTriggered && !localidad ? "1px solid red" : "",
-                }}
-              />
+                    border: isValidationTriggered && !localidad ? "1px solid red" : ""
+                }}>
+                <option value="">Seleccionar</option>
+                {provincias.map((razaOption) => (
+                    <option key={razaOption.Nombre[0]} value={razaOption.Nombre[0]}>
+                        {razaOption.Nombre[0]}
+                    </option>
+                ))}
+            </select>
             </div>
             <div className="input_box">
               <h3>Código Postal</h3>
-              <input
+              <select 
+                className="inputs_larger"
+                value={codigoPostal} 
+                onChange={(event) => setCodigoPostal(event.target.value)} 
+                style={{
+                    border: isValidationTriggered && !codigoPostal ? "1px solid red" : ""
+                }}>
+                <option value="">Seleccionar</option>
+                {codePostal?.map((postalCode) => (
+                    <option key={postalCode?.Descripcion?.[0]} value={postalCode?.Descripcion?.[0]}>
+                        {postalCode?.Descripcion?.[0]}
+                    </option>
+                ))}
+            </select>
+              {/* <input
                 className="shorter_inputs"
                 type="text"
                 value={codigoPostal}
@@ -368,7 +461,7 @@ function formatDate(date) {
                       ? "1px solid red"
                       : "",
                 }}
-              />
+              /> */}
             </div>
           </div>
 
